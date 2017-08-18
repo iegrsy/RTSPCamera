@@ -59,8 +59,8 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
     public static final String CONFIG_BUFFER_TYPE = "BUFFER_TYPE";
     public static final String CONFIG_RECEIVE_BUFFER_SIZE = "RECEIVE_BUFFER_SIZE_BYTES";
     public static final int DATA_STREAMING_PORT = 5006;
-    public static final int SURFACE_WIDTH = 800;
-    public static final int SURFACE_HEIGHT = 600;
+    public static final int SURFACE_WIDTH = 600;
+    public static final int SURFACE_HEIGHT = 800;
     public static final String TRANSPORT_PROTOCOL = "RTP";
     public static final String VIDEO_CODEC = "H.264";
 
@@ -71,7 +71,7 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
     private final Properties configuration;
     public String bufferType = "time-window";
     public boolean useNio = true;
-    public int receiveBufferSize = 50000;
+    public int receiveBufferSize = 500000;
     private PlayerThread playerThread;
     private RtpMediaExtractor rtpMediaExtractor;
     private RTPClientThread rtpSessionThread;
@@ -97,18 +97,17 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
      *
      * @param surfaceView view where to play video streaming
      * @param properties  used to configure the debugging variable
-     *
-     * The configuration properties includes:
-     *  DEBUGGING: boolean indicating if information should be sent to logcat.
-     *  USE_NIO: boolean indicating how to change the underlying I/O mechanism used by Netty.
-     *      'false' will force the usage of NioDatagramChannelFactory vs. the default (true) which
-     *      uses OioDatagramChannelFactory
-     *  RECEIVE_BUFFER_SIZE_BYTES: number of bytes to configure underlying RTP session.
-     *  BUFFER_TYPE: Has to be one of: 'time-window' or 'min-delay' in order to choose between existing
-     *      buffering approaches.
-     *  NODELAY_TIMEOUT: Maximum delay in milliseconds for the min-delay buffer.
-     *  FRAMES_WINDOW_TIME=1000: Window size in milliseconds for the time-window buffer
-     *
+     *                    <p>
+     *                    The configuration properties includes:
+     *                    DEBUGGING: boolean indicating if information should be sent to logcat.
+     *                    USE_NIO: boolean indicating how to change the underlying I/O mechanism used by Netty.
+     *                    'false' will force the usage of NioDatagramChannelFactory vs. the default (true) which
+     *                    uses OioDatagramChannelFactory
+     *                    RECEIVE_BUFFER_SIZE_BYTES: number of bytes to configure underlying RTP session.
+     *                    BUFFER_TYPE: Has to be one of: 'time-window' or 'min-delay' in order to choose between existing
+     *                    buffering approaches.
+     *                    NODELAY_TIMEOUT: Maximum delay in milliseconds for the min-delay buffer.
+     *                    FRAMES_WINDOW_TIME=1000: Window size in milliseconds for the time-window buffer
      */
     public RtpMediaDecoder(SurfaceView surfaceView, Properties properties) {
         configuration = (properties != null) ? properties : new Properties();
@@ -120,6 +119,7 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
         receiveBufferSize = Integer.parseInt(configuration.getProperty(CONFIG_RECEIVE_BUFFER_SIZE, Integer.toString(receiveBufferSize)));
 
         log.info("RtpMediaDecoder started with params (" + DEBUGGING + "," + bufferType + "," + useNio + "," + receiveBufferSize + ")");
+
 
         this.surfaceView = surfaceView;
         surfaceView.getHolder().addCallback(this);
@@ -133,6 +133,8 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
     public void setTraceOutputStream(OutputStream outputStream) {
         traceOutputStream = outputStream;
     }
+
+
 
     /**
      * Starts decoder, including the underlying RTP session
@@ -261,6 +263,7 @@ public class RtpMediaDecoder implements Decoder, SurfaceHolder.Callback {
         layoutParams.height = SURFACE_HEIGHT; // required height
         surfaceView.setLayoutParams(layoutParams);
     }
+
 
     /**
      * Starts playing video when surface view is ready

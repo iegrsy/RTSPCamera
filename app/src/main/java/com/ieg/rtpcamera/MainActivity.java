@@ -9,6 +9,8 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 
+
+
 import com.c77.androidstreamingclient.lib.rtp.RtpMediaDecoder;
 
 import java.io.FileNotFoundException;
@@ -21,8 +23,7 @@ import java.nio.ByteOrder;
 import java.util.Properties;
 
 
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.toString();
     private SurfaceView surfaceView;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         surfaceView = (SurfaceView) findViewById(R.id.surface_view);
 
@@ -49,7 +51,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // logcat, some buffer-associated configurations, etc.
         // For more details about this configuration, check Android Streaming Library documentation
         // and the configuration.ini file from this example.
+
+
         rtpMediaDecoder = new RtpMediaDecoder(surfaceView, configuration);
+
 
         // Defines where data packet arrival information should be traced.
         // This configuration is optional but it comes up handy when trying to debug the client
@@ -69,28 +74,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // listens to surface view click to restart client.
         surfaceView.setOnClickListener(this);
 
-//        showDebugInfo();
+        showDebugInfo();
     }
 
     /**
      * Show main configuration values being used for the video client.
      */
-//    private void showDebugInfo() {
-//        TextView ipAndPort = (TextView) findViewById(R.id.ip_and_port);
-//        ipAndPort.setText(wifiIpAddress() + "\n" + rtpMediaDecoder.getDataStreamingPort());
-//
-//        TextView resolution = (TextView) findViewById(R.id.resolution);
-//        resolution.setText(rtpMediaDecoder.getResolution());
-//
-//        TextView transportProtocol = (TextView) findViewById(R.id.transport_protocol);
-//        transportProtocol.setText(rtpMediaDecoder.getTransportProtocol());
-//
-//        TextView codec = (TextView) findViewById(R.id.codec);
-//        codec.setText(rtpMediaDecoder.getVideoCodec());
-//
-//        TextView bufferType = (TextView) findViewById(R.id.buffer_type);
-//        bufferType.setText(rtpMediaDecoder.getBufferType());
-//    }
+    private void showDebugInfo() {
+        Log.i("configure settings", "IP:PORT : " + wifiIpAddress() + ":" + rtpMediaDecoder.getDataStreamingPort());
+
+        Log.i("configure settings", "Resolution : " + rtpMediaDecoder.getResolution());
+
+        Log.i("configure settings", "Transport Protocol : " + rtpMediaDecoder.getTransportProtocol());
+
+        Log.i("configure settings", "Video Codec : " + rtpMediaDecoder.getVideoCodec());
+
+        Log.i("configure settings", "Buffer Type : " + rtpMediaDecoder.getBufferType());
+    }
 
     /**
      * Get the device IP address and format it into a human readable one.
