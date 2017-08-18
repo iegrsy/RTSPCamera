@@ -9,8 +9,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 
-
-
 import com.c77.androidstreamingclient.lib.rtp.RtpMediaDecoder;
 
 import java.io.FileNotFoundException;
@@ -22,6 +20,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.Properties;
 
+import com.ieg.rtpcamera.IPCamSrc;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,17 +29,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RtpMediaDecoder rtpMediaDecoder;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         surfaceView = (SurfaceView) findViewById(R.id.surface_view);
 
         Properties configuration = new Properties();
-        try {
+        try
+        {
             configuration.load(getApplicationContext().getAssets().open("configuration.ini"));
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 
@@ -60,10 +61,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // This configuration is optional but it comes up handy when trying to debug the client
         // side without messing with Android Studio debugger.
         OutputStream out;
-        try {
+        try
+        {
             out = getApplicationContext().openFileOutput("example.trace", Context.MODE_PRIVATE);
             rtpMediaDecoder.setTraceOutputStream(out);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e)
+        {
             e.printStackTrace();
         }
 
@@ -80,15 +83,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * Show main configuration values being used for the video client.
      */
-    private void showDebugInfo() {
+    private void showDebugInfo()
+    {
         Log.i("configure settings", "IP:PORT : " + wifiIpAddress() + ":" + rtpMediaDecoder.getDataStreamingPort());
-
         Log.i("configure settings", "Resolution : " + rtpMediaDecoder.getResolution());
-
         Log.i("configure settings", "Transport Protocol : " + rtpMediaDecoder.getTransportProtocol());
-
         Log.i("configure settings", "Video Codec : " + rtpMediaDecoder.getVideoCodec());
-
         Log.i("configure settings", "Buffer Type : " + rtpMediaDecoder.getBufferType());
     }
 
@@ -97,21 +97,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      *
      * @return device's IP address
      */
-    protected String wifiIpAddress() {
+    protected String wifiIpAddress()
+    {
         WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
 
         // Convert little-endian to big-endian if needed
-        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN))
+        {
             ipAddress = Integer.reverseBytes(ipAddress);
         }
 
         byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
 
         String ipAddressString;
-        try {
+        try
+        {
             ipAddressString = InetAddress.getByAddress(ipByteArray).getHostAddress();
-        } catch (UnknownHostException ex) {
+        } catch (UnknownHostException ex)
+        {
             Log.e(TAG, "Unable to get host address.");
             ipAddressString = null;
         }
@@ -120,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
 
         // Releases the RTP decoder.
@@ -129,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View view) {
+    public void onClick(View view)
+    {
         // Restarts the RTP decoder.
         rtpMediaDecoder.restart();
     }
